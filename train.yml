@@ -1,0 +1,4 @@
+config:
+  num_epochs: 100  # Complete passes over dataset
+  batch_size: 32
+  learning_rate: 0.0003  # Use a small learning rate

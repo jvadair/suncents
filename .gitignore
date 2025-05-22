@@ -1,0 +1,9 @@
+classifier_labeleddata
+pixabay
+random-images
+timeofdaydataset
+cloudsky-segmentation
+.venv
+pixabay.yml
+*.zip
+*.pyc
