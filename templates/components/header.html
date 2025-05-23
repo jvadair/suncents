@@ -1,0 +1,13 @@
+<header>
+    <div class="title">
+        <a href="/"><img src="/static/img/logo.svg" alt="Suncents logo"></a>
+    </div>
+    <div class="account">
+        {% if session.get('user_id') %}
+            <p class="bal">{{ bal }}¢</p>
+        {% else %}
+            <a href="/auth/login" class="btn login-btn">Login</a>
+            <a href="/auth/register" class="btn login-btn">Sign up</a>
+        {% endif %}
+    </div>
+</header>

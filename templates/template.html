@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Sun¢ents</title>
+    <link rel="stylesheet" href="/static/css/{% block stylesheet %}{% endblock %}">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+{% block content %}{% endblock %}
+</main>
+{% include "components/footer.html" %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

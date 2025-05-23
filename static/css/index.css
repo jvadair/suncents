@@ -1,0 +1,7 @@
+main h1 {
+    font-size: 5rem;
+    font-family: "DotGothic16", sans-serif;
+    width: 100%;
+    text-align: center;
+    text-decoration: underline;
+}
