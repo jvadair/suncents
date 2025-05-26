@@ -1,0 +1,58 @@
+main {
+    background-image: url("/static/img/sunsetloginblur.jpg");
+    background-size: cover;
+    justify-content: center;
+    align-items: center;
+}
+
+form.auth {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 2rem;
+    border-radius: 2rem;
+    background-color: rgba(211,211,211,0.3);
+    backdrop-filter: blur(1rem);
+    min-width: 40rem;
+    max-width: 50rem;
+    min-height: 30rem;
+    max-height: 50rem;
+    grid-gap: 1rem;
+}
+
+form.auth input {
+    background-color: var(--background-color);
+    color: var(--text);
+    transition-duration: .2s;
+    border-radius: 1rem;
+    text-decoration: none;
+    padding: 1rem;
+    width: 100%;
+    outline: none;
+    border: none;
+}
+
+form.auth input:focus {
+    outline: 2px solid var(--accent);
+}
+
+form.auth .btn {
+    background-color: var(--accent);
+    width: 50%;
+    align-self: center;
+}
+
+form.auth .btn:hover {
+    color: var(--text);
+    box-shadow: var(--background-color) 0 0 0 0.2rem;
+}
+
+.auth h1 {
+    font-size: 5rem;
+    font-family: "DotGothic16", sans-serif;
+}
+
+.auth .alternative-link {
+    margin-bottom: 2rem;
+}

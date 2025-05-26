@@ -69,13 +69,24 @@ html {
 	color: var(--text);
     scroll-behavior: smooth;
     font-family: "Inter", sans-serif;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 main {
     display: flex;
     flex-direction: column;
     grid-gap: 1rem;
-    margin: 1rem;
+    padding: 1rem;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
 }
 
 a {
@@ -92,6 +103,7 @@ a {
     transition-duration: .2s;
     border-radius: 0.5rem;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .btn:hover {

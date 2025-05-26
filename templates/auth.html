@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+{% block stylesheet %}auth.min.css{% endblock %}
+{% block content %}
+    <form class="auth" method="post">
+        {% if auth_type == 'login' %}
+            <h1>Login</h1>
+            <a class="alternative-link" href="/auth/register">or Register</a>
+            <label>
+                <input type="text" name="username" placeholder="Username or Email">
+            </label>
+        {% elif auth_type == 'register' %}
+            <h1>Register</h1>
+            <a class="alternative-link" href="/auth/login">or Login</a>
+            <label>
+                <input type="text" name="username" placeholder="Username">
+            </label>
+            <label>
+                <input type="text" name="email" placeholder="Email">
+            </label>
+        {% endif %}
+        <label>
+            <input type="password" name="password" placeholder="Password">
+        </label>
+        <button class="btn" type="submit">{{ "Login" if auth_type == 'login' else "Register" }}</button>
+    </form>
+{% endblock %}
