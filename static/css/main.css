@@ -148,6 +148,11 @@ header .account {
     grid-gap: 1rem;
 }
 
+header .account p {
+    font-family: "DotGothic16", sans-serif;
+    font-size: 2rem;
+}
+
 header .account .btn {
     height: 3rem;
 }
