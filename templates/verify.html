@@ -1,0 +1,11 @@
+{% extends "template.html" %}
+{% block stylesheet %}verify.min.css{% endblock %}
+{% block content %}
+    <h1>Almost ready!</h1>
+    <p>To prevent spam, bots, and the likes, we require all users to verify their emails. Please check your email for a link!</p>
+    <hr>
+    <p>Verified your account from another device?</p>
+    <form action="/verify" method="post">
+        <button class="btn" type="submit">Click here</button>
+    </form>
+{% endblock %}
