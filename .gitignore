@@ -4,6 +4,7 @@ random-images
 timeofdaydataset
 cloudsky-segmentation
 .venv
+gribs
 pixabay.yml
 *.zip
 *.pyc

@@ -172,5 +172,6 @@ def context_processor():
         "bal": bal,
     }
 
+
 if __name__ == "__main__":
     app.run(host=config.flask.host(), port=config.flask.port())
