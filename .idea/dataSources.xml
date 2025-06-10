@@ -8,5 +8,13 @@
       <jdbc-url>jdbc:mariadb://squid:3306/suncents</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="devdb.sqlite" uuid="a70bd1c0-8ebc-47e1-9763-8240e98dec1d">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>Local development database</remarks>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:devdb.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

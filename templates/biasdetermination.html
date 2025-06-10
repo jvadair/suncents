@@ -1,0 +1,41 @@
+{% extends "template.html" %}
+{% block stylesheet %}bias.min.css{% endblock %}
+{% block content %}
+    <div class="description">
+        <h1>Please rate the following sunsets:</h1>
+        <p style="width: 100%; text-align: center">This helps us to understand the way you score sunsets for later.</p>
+    </div>
+    <div id="sunsets">
+        {% for sunset in sunsets %}
+            <div class="sunset">
+{#                <img src="/static/img/bias/{{ sunset }}.jpg" alt="Sunset">#}
+                <div class="sunset-image" style='background-image: url("/static/img/bias/{{ sunset }}.jpg")'></div>
+                <input type="range" name="sunset-{{ sunset }}" id="sunset-{{ sunset }}" min="0" max="100" value="50">
+            </div>
+        {% endfor %}
+    </div>
+    <div id="submit">
+        <p>Submit →</p>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $("#submit").on("click", function () {
+        let sunsets = {};
+        for (let i = 0; i < {{ len(sunsets) }}+1; i++) {
+            sunsets[i] = $("#sunset-" + i).val();
+        }
+        console.log(sunsets);
+        $.ajax({
+            url: "/onboarding/ratesunsets",
+            type: "POST",
+            data: JSON.stringify(sunsets),
+            contentType: "application/json",
+            success: function () {
+                window.location = "/";
+                {#console.log("success!")#}
+            }
+        })
+    })
+</script>
+{% endblock %}

@@ -1,3 +1,5 @@
+import os
+
 import argon2.exceptions
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, send_from_directory
 from pyntree import Node
@@ -5,11 +7,10 @@ from time import sleep
 import re
 from argon2 import PasswordHasher
 import uuid
-
-from rich.markup import render
-
+from random import shuffle
 from db_connector import db, conn, engine, metadata
 from sendmail import send_template
+from os import listdir
 
 app = Flask(__name__)
 config = Node("config.yml")
@@ -20,6 +21,10 @@ EMAIL_REGEX = re.compile(r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=
 
 # Server config
 app.secret_key = config.flask.secret_key()
+
+
+# Table loading
+users = db.Table("users", metadata, autoload_with=engine)
 
 
 @app.route("/")
@@ -60,7 +65,6 @@ def register():
         return jsonify({"error": "Invalid email!"})
 
     # Validate that email and username are not taken
-    users = db.Table("users", metadata, autoload_with=engine)
     email_exists = db.select(users).where(
         users.c.email == email
     )
@@ -87,7 +91,6 @@ def register():
 
 @app.route("/auth/login/", methods=["POST"])
 def login():
-    users = db.Table("users", metadata, autoload_with=engine)
     q = db.select(users).where(
         users.c.username == request.form.get("username")
     )
@@ -102,6 +105,7 @@ def login():
             ph.verify(user.password, request.form.get("password").encode("utf-8"))
             session["user_id"] = user.id
             session["verified"] = user.verified
+            session["is_onboarded"] = bool(user.bias)
         except argon2.exceptions.VerifyMismatchError:
             return jsonify({"error": "Invalid password!"})
     else:
@@ -120,7 +124,6 @@ def verify():
     token = request.args.get("token")
     if not token:
         return render_template("verify.html")
-    users = db.Table("users", metadata, autoload_with=engine)
     q = db.select(users).where(
         users.c.verification_code == uuid.UUID(token)
     )
@@ -142,7 +145,6 @@ def verify():
 def doublecheck_verify():
     if not session.get("user_id"):
         return redirect("/auth/login")
-    users = db.Table("users", metadata, autoload_with=engine)
     q = db.select(users).where(
         users.c.id == session.get("user_id")
     )
@@ -151,6 +153,36 @@ def doublecheck_verify():
         session["verified"] = True
         return redirect("/")
     return render_template("verify.html")
+
+
+@app.route('/onboarding/ratesunsets', methods=['GET'])
+def biasdetermination():
+    if not session.get("user_id"):
+        return redirect("/auth/login")
+    sunsets = os.listdir("static/img/bias")
+    shuffle(sunsets)
+    sunsets = [s.rsplit(".", maxsplit=1)[0] for s in sunsets]
+    return render_template("biasdetermination.html", sunsets=sunsets)
+
+
+@app.route('/onboarding/ratesunsets', methods=['POST'])
+def process_biases():
+    if not session.get("user_id"):
+        return redirect("/auth/login")
+    biases = dict(request.json)
+    bias = 0
+    for num, score in biases.items():
+        bias += int(score) - config.bias_standard.get(int(num))()
+    print(bias)
+    q = db.update(users).where(
+        users.c.id == session["user_id"]  # The user should be logged in or there should be an error
+    )
+    conn.execute(q, {
+        "bias": bias
+    })
+    conn.commit()
+    session["is_onboarded"] = True
+    return "OK"
 
 
 @app.before_request
@@ -162,14 +194,17 @@ def before_request():
         if session.get("user_id"):
             if not session.get("verified"):
                 return redirect("/verify")
+            elif not session.get("is_onboarded"):
+                if request.path.split("/")[1] != "onboarding":
+                    return redirect('/onboarding/ratesunsets')
 
 
 @app.context_processor
 def context_processor():
-    users = db.Table("users", metadata, autoload_with=engine)
     bal = lambda: conn.execute(db.select(users).where(users.c.id == session.get("user_id"))).fetchone().balance
     return {
         "bal": bal,
+        "len": len,
     }
 
 
