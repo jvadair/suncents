@@ -5,16 +5,24 @@
 <h1>Sun¢ents</h1>
 {% if session.get("user_id") %}
     <div id="overview">
-        <div id="score">
-            <h1 id="sunscore">N/A</h1>
-            <p id="sunscore-location">SunScore for {location}</p>
+        <div class="scorebox">
+            <div id="score">
+                <h1 id="sunscore">N/A</h1>
+                <p id="sunscore-location">SunScore for <span class="location">...</span></p>
+            </div>
         </div>
         <div id="quickview">
-            <p id="sunset-time">
-                ...
+            <p>
+                <span class="material-symbols-outlined">location_on</span>
+                <span class="location">...</span>
+            </p>
+            <p>
+                <span class="material-symbols-outlined">wb_twilight</span>
+                <span id="sunset-time">...</span>
             </p>
             <p class="weather">
-                <!--TODO: Query NWS API as client-->
+                <span class="material-symbols-outlined">pending</span>
+                <span id="weather">...</span>
             </p>
             <p class="btn">
                 Rate sunset
@@ -35,16 +43,21 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    let coords;
-    async function getSunDownTimeHere() {
-        coords = await getCoordinates();
-        return getSunDownTime(coords);
-    }
-
     $(document).ready(function () {
-        getSunDownTimeHere().then(function (sunsetTime) {
-            $("#sunset-time").text(sunsetTime);
-        })
-    })
+        getCoordinates().then().then(function (coords) {
+            getSunDownTime(coords).then(function (sunsetTime) {
+                $("#sunset-time").text(sunsetTime);
+            });
+            getLocationData(coords).then(function (data) {
+                let locationString = data["properties"]["relativeLocation"]["properties"]["city"] + ", " + data["properties"]["relativeLocation"]["properties"]["state"];
+                $(".location").each(function () {
+                    $(this).text(locationString);
+                })
+                getForecastData(data).then(function (data) {
+                    $("#weather").text(data["properties"]["periods"][0]["shortForecast"]);
+                })
+            });
+        });
+    });
 </script>
 {% endblock %}

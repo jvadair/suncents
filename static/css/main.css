@@ -54,6 +54,7 @@ table {
 
 * {
 	box-sizing: border-box;
+    font-family: "Iter", sans-serif;
 }
 
 
@@ -62,6 +63,14 @@ table {
     --background-color: white;
     --text: black;
     --accent: #ff9955
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
 html {

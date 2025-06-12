@@ -23,3 +23,14 @@ async function getSunDownTime(coords) {
     const sunsetTime = data["sunset"];
     return sunsetTime.split(" ")[1];
 }
+
+async function getLocationData(coords) {
+    const {latitude, longitude} = coords;
+    const res = await fetch(`https://api.weather.gov/points/${latitude},${longitude}`);
+    return await res.json();
+}
+
+async function getForecastData(locationData) {
+    const res = await fetch(locationData["properties"]["forecast"]);
+    return await res.json();
+}
