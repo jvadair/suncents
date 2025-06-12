@@ -4,6 +4,7 @@
     {% include "components/boilerplate.html" %}
     <title>Suncents</title>
     <link rel="stylesheet" href="/static/css/{% block stylesheet %}{% endblock %}">
+    {% block include %}{% endblock %}
 </head>
 <body>
 {% include "components/header.html" %}

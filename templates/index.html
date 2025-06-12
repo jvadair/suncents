@@ -1,5 +1,50 @@
 {% extends "template.html" %}
 {% block stylesheet %}index.min.css{% endblock %}
+{% block include %}<script src="/static/js/weather.min.js"></script>{% endblock %}
 {% block content %}
 <h1>Sun¢ents</h1>
+{% if session.get("user_id") %}
+    <div id="overview">
+        <div id="score">
+            <h1 id="sunscore">N/A</h1>
+            <p id="sunscore-location">SunScore for {location}</p>
+        </div>
+        <div id="quickview">
+            <p id="sunset-time">
+                ...
+            </p>
+            <p class="weather">
+                <!--TODO: Query NWS API as client-->
+            </p>
+            <p class="btn">
+                Rate sunset
+            </p>
+        </div>
+    </div>
+{% endif %}
+<div id="about">
+    <h2>About Suncents</h2>
+    <p>Suncents is a fun web game that allows you to earn suncents by taking pictures of the sunset. We want to encourage people to enjoy the beauty that is the sunset and have some fun with it!</p>
+    <h3>How do I get cents?</h3>
+    <p>To earn "suncents", all you need to do is upload a sunset photo to the website while the sun is setting. You'll get a semi-random amount of points based on how cool your sunset looks, so try and capture those breathtaking moments! You'll also get some suncents even if the sunset isn't as exciting, and it helps us with our mission too.</p>
+    <h3>Why was Suncents created?</h3>
+    <p>Suncents was created by 2 friends to try and devise a better way to predict whether there would be a good sunset.</p>
+    <h3>What is the goal of Suncents?</h3>
+    <p>The ultimate goal of the project is to develop an AI model that can predict how good a sunset will be. This way, everyone will be able to know when the most breathtaking moments will appear! We are looking to offer forecasts up to several days in advance, but also predictions that become more accurate hourly.</p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    let coords;
+    async function getSunDownTimeHere() {
+        coords = await getCoordinates();
+        return getSunDownTime(coords);
+    }
+
+    $(document).ready(function () {
+        getSunDownTimeHere().then(function (sunsetTime) {
+            $("#sunset-time").text(sunsetTime);
+        })
+    })
+</script>
 {% endblock %}
