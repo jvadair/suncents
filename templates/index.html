@@ -21,7 +21,7 @@
                 <span id="sunset-time">...</span>
             </p>
             <p class="weather">
-                <span class="material-symbols-outlined">pending</span>
+                <span id="weather-icon" class="material-symbols-outlined">pending</span>
                 <span id="weather">...</span>
             </p>
             <p class="btn">
@@ -54,7 +54,11 @@
                     $(this).text(locationString);
                 })
                 getForecastData(data).then(function (data) {
-                    $("#weather").text(data["properties"]["periods"][0]["shortForecast"]);
+                    let weatherString = data["properties"]["periods"][0]["shortForecast"];
+                    weatherString = weatherString.charAt(0).toUpperCase() + weatherString.slice(1).toLowerCase();
+                    $("#weather").text(weatherString);
+                    $("#weather-icon").attr("class", "");
+                    $("#weather-icon").html(`<img src="${data["properties"]["periods"][0]["icon"].replace("medium", "small")}">`);
                 })
             });
         });
